@@ -1,9 +1,19 @@
 const express = require('express');
 const transfer = require('./transfer-script');
 
-express.get('/', (req, res) => {
-  console.log('The server ran!!!!!');
-});
+const PORT = process.env.PORT || 5000;
+
+express
+  .get('/', (req, res) => {
+    res.send('Hello heroku');
+  })
+  .listen(PORT, async () => {
+    try {
+      console.log(`Listening on ${PORT}`);
+    } catch (err) {
+      console.error(err);
+    }
+  });
 
 transfer();
 // when server start must run these sorts of commands
