@@ -1,4 +1,4 @@
-const pool = require('../db/index');
+const pool = require('../db/database');
 
 async function getAllPosts() {
   try {
