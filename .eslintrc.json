@@ -26,7 +26,8 @@
         "no-param-reassign":"warn",
         "spaced-comment":"warn",
         "prefer-template":"warn",
-        "no-bitwise":"warn"
+        "no-bitwise":"warn",
+        "no-undef":"warn"
     },
     "parserOptions": {
         "sourceType": "module"
