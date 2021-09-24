@@ -120,7 +120,8 @@ const updateKarma = async (react, user, isReactionAdd) => {
   karma = isReactionAdd ? karma : -1 * karma;
 
   updateUserKarma(react.message.author.id, karma);
-  const post = await getPost(react.message.id); // for purpose of checking if the upvote was on a post
+  const result = await getPost(react.message.id); // for purpose of checking if the upvote was on a post
+  const post = result.rows[0];
   if (post) {
     updatePostKarma(react.message.id, karma);
   }

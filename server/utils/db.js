@@ -91,10 +91,7 @@ async function insertPost({
         if (err) {
           console.log(err.stack);
         } else {
-          console.log(
-            `...post inserted at ${new Date().toString()}:`,
-            res.rows[0]
-          );
+          console.log(`...post inserted at ${new Date().toString()}:`);
         }
       }
     );
@@ -117,7 +114,7 @@ async function insertUser({ userID, username, karma, postCount }) {
         if (err) {
           console.log(err.stack);
         } else {
-          console.log('...user inserted:', res.rows[0]);
+          console.log(`...user ${username} inserted into database`);
         }
       }
     );
@@ -147,16 +144,7 @@ async function updateUserKarma(userID, value) {
   try {
     const client = await pool.connect();
     const query = 'UPDATE users SET karma = karma + $1 WHERE userid = $2;';
-    await client.query(query, [value, userID], (err, res) => {
-      if (err) {
-        console.log(err.stack);
-      } else {
-        const user = res.rows[0];
-        console.log(
-          `...${user.username} karma updated by ${value} points to ${user.karma}`
-        );
-      }
-    });
+    await client.query(query, [value, userID]);
     client.release();
   } catch (err) {
     console.error(err);
@@ -169,14 +157,7 @@ async function incrementUserPostCount(userID) {
     const client = await pool.connect();
     const query =
       'UPDATE users SET postCount = postCount + 1 WHERE userID = $1;';
-    await client.query(query, [userID], (err, res) => {
-      if (err) {
-        console.log(err.stack);
-      } else {
-        const user = res.rows[0];
-        console.log(`...${user.username} now has ${user.postcount} posts`);
-      }
-    });
+    await client.query(query, [userID]);
     client.release();
   } catch (err) {
     console.error(err);
@@ -193,10 +174,7 @@ async function updatePostKarma(messageID, value) {
       if (err) {
         console.log(err.stack);
       } else {
-        const post = res.rows[0];
-        console.log(
-          `...post by userID ${post.userid} updated by ${value} points to ${post.upvotes}`
-        );
+        console.log(`...a post with ID ${messageID}received ${value} points`);
       }
     });
     client.release();
