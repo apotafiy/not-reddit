@@ -22,8 +22,10 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "client": "react-scripts start"
   },
+  "proxy":"http://localhost:5000",
   "eslintConfig": {
     "extends": [
       "react-app",

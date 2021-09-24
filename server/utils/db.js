@@ -73,20 +73,32 @@ async function insertPost({
     const client = await pool.connect();
     const query =
       'INSERT INTO posts (messageID, userID, publicID, version, format, resourceType, createdAt, type, secureURL, upvotes) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);';
-    await client.query(query, [
-      messageID,
-      userID,
-      publicID,
-      version,
-      format,
-      resourceType,
-      createdAt,
-      type,
-      secureURL,
-      upvotes,
-    ]);
+    await client.query(
+      query,
+      [
+        messageID,
+        userID,
+        publicID,
+        version,
+        format,
+        resourceType,
+        createdAt,
+        type,
+        secureURL,
+        upvotes,
+      ],
+      (err, res) => {
+        if (err) {
+          console.log(err.stack);
+        } else {
+          console.log(
+            `...post inserted at ${new Date().toString()}:`,
+            res.rows[0]
+          );
+        }
+      }
+    );
     client.release();
-    console.log(`...post inserted into db at ${new Date().toString()}`);
   } catch (err) {
     console.error(err);
   }
@@ -98,7 +110,17 @@ async function insertUser({ userID, username, karma, postCount }) {
     const client = await pool.connect();
     const query =
       'INSERT INTO users (userID, username, karma, postCount) values ($1, $2, $3, $4);';
-    await client.query(query, [userID, username, karma, postCount]);
+    await client.query(
+      query,
+      [userID, username, karma, postCount],
+      (err, res) => {
+        if (err) {
+          console.log(err.stack);
+        } else {
+          console.log('...user inserted:', res.rows[0]);
+        }
+      }
+    );
     client.release();
   } catch (err) {
     console.error(err);
@@ -125,7 +147,16 @@ async function updateUserKarma(userID, value) {
   try {
     const client = await pool.connect();
     const query = 'UPDATE users SET karma = karma + $1 WHERE userid = $2;';
-    await client.query(query, [value, userID]);
+    await client.query(query, [value, userID], (err, res) => {
+      if (err) {
+        console.log(err.stack);
+      } else {
+        const user = res.rows[0];
+        console.log(
+          `...${user.username} karma updated by ${value} points to ${user.karma}`
+        );
+      }
+    });
     client.release();
   } catch (err) {
     console.error(err);
@@ -135,11 +166,17 @@ async function updateUserKarma(userID, value) {
 
 async function incrementUserPostCount(userID) {
   try {
-    // TODO: update methods arent working
     const client = await pool.connect();
     const query =
       'UPDATE users SET postCount = postCount + 1 WHERE userID = $1;';
-    await client.query(query, [userID]);
+    await client.query(query, [userID], (err, res) => {
+      if (err) {
+        console.log(err.stack);
+      } else {
+        const user = res.rows[0];
+        console.log(`...${user.username} now has ${user.postcount} posts`);
+      }
+    });
     client.release();
   } catch (err) {
     console.error(err);
@@ -152,7 +189,16 @@ async function updatePostKarma(messageID, value) {
     const client = await pool.connect();
     const query =
       'UPDATE posts SET upvotes = upvotes + $1 WHERE messageID = $2;';
-    await client.query(query, [value, messageID]);
+    await client.query(query, [value, messageID], (err, res) => {
+      if (err) {
+        console.log(err.stack);
+      } else {
+        const post = res.rows[0];
+        console.log(
+          `...post by userID ${post.userid} updated by ${value} points to ${post.upvotes}`
+        );
+      }
+    });
     client.release();
   } catch (err) {
     console.error(err);

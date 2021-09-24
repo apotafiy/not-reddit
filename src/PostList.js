@@ -48,15 +48,22 @@ const PostList = () => {
   ];
   const [posts, setPosts] = useState(null);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setPosts(db);
-    }, 2000);
+  useEffect(async () => {
+    // const url = '';
+    const fetched = await fetch('/api/db/posts');
+    const data = await fetched.json();
+    data.sort((a, b) => a.createdat.localeCompare(b.createdat));
+    const idNameMap = {};
+    // for(){
+
+    // }
+    data.reverse();
+    setPosts(data);
   }, []);
 
   return (
     <div className="post-list">
-      {posts && posts.map((post) => <Post dbData={post} key={post.postID} />)}
+      {posts && posts.map((post) => <Post dbData={post} key={post.postid} />)}
     </div>
   );
 };

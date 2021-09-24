@@ -1,11 +1,11 @@
 const Post = ({ dbData }) => {
-  const { userName, createdAt, secureURL, karma } = dbData;
+  const { username, createdat, secureurl, karma } = dbData;
   return (
     <div className="post">
-      <img src={secureURL} alt="Dank Meme" />
+      <img src={secureurl} alt="Dank Meme" />
       <div className="post-info">
-        <p className="user-name">{`user: ${userName}`}</p>
-        <p className="created-at">{`created at: ${createdAt}`}</p>
+        <p className="user-name">{`user: ${username}`}</p>
+        <p className="created-at">{`created at: ${createdat}`}</p>
         <p className="karma">{`karma: ${karma}`}</p>
       </div>
     </div>
