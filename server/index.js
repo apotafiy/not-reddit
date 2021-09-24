@@ -1,6 +1,6 @@
 const express = require('express');
 const { botLogin } = require('../bot/bot');
-const { getAllUsers, getAllPosts } = require('./utils/db');
+const { getAllUsers, getAllPosts, initializeDB } = require('./utils/db');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -33,11 +33,9 @@ app.get('/api/db/posts', async (req, res) => {
 app.listen(PORT, async () => {
   try {
     console.log(`Listening on ${PORT}`);
+    await initializeDB();
     botLogin();
   } catch (err) {
     console.error(err);
   }
 });
-
-// when server start must run these sorts of commands
-// const query ='CREATE TABLE IF NOT EXISTS dings (id SERIAL NOT NULL, week_day text NOT NULL, month_date integer NOT NULL, month text NOT NULL, year integer NOT NULL, time text NOT NULL, doorbot_description text NOT NULL, kind text NOT NULL, detection_type text NOT NULL, PRIMARY KEY (id))';
