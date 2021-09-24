@@ -101,124 +101,6 @@ const karmaGain = (react) => {
   return karma;
 };
 
-// const getPost = (messageID, db) => {
-//   return new Promise((resolve, reject) => {
-//     db.get(
-//       'SELECT * FROM posts WHERE messageID = ?',
-//       [messageID],
-//       (err, row) => {
-//         if (err) {
-//           reject(err);
-//           return;
-//         }
-//         resolve(row);
-//       }
-//     );
-//   });
-// };
-
-// const getAllUsers = (db) => {
-//   return new Promise((resolve, reject) => {
-//     db.all('SELECT * FROM users', [], (err, row) => {
-//       if (err) {
-//         reject(err);
-//         return;
-//       }
-//       resolve(row); // WILL THIS CAUSE A BUG?
-//     });
-//   });
-// };
-
-// const openDB = () => {
-//   return new sqlite3.Database(
-//     './database.db',
-//     sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
-//     (err) => {
-//       if (err) {
-//         console.error(err.message, err.stack);
-//       }
-//     }
-//   );
-// };
-
-// const closeDB = (db) => {
-//   db.close((err) => {
-//     if (err) {
-//       console.error(err.message, err.stack);
-//     }
-//   });
-// };
-
-// const addTablesToDB = (db) => {
-//   // will need to do this in the server index.js
-//   return new Promise((resolve, reject) => {
-//     const CREATE_POSTS_TABLE_SQL =
-//       'CREATE TABLE IF NOT EXISTS "posts" ("messageID"	TEXT NOT NULL,"userID"	TEXT NOT NULL,"publicID"	TEXT NOT NULL,"version"	INTEGER NOT NULL,"format"	TEXT NOT NULL,"resourceType"	TEXT NOT NULL,"createdAt"	TEXT NOT NULL,"type"	TEXT NOT NULL,"secureURL"	TEXT NOT NULL,"upvotes"	INTEGER NOT NULL DEFAULT 0,PRIMARY KEY("messageID"),FOREIGN KEY("userID") REFERENCES "users"("userID"));';
-
-//     const CREATE_USERS_TABLE_SQL =
-//       'CREATE TABLE IF NOT EXISTS "users" ("userID"	TEXT,"username"	TEXT,"karma"	INTEGER DEFAULT 0,"postCount"	INTEGER DEFAULT 0,PRIMARY KEY("userID"));';
-//     db.serialize(() => {
-//       db.run(CREATE_POSTS_TABLE_SQL, [], (err) => {
-//         if (err) {
-//           reject(err);
-//         }
-//       }).run(CREATE_USERS_TABLE_SQL, [], (err) => {
-//         if (err) {
-//           reject(err);
-//           return;
-//         }
-//         resolve('...tables added to db');
-//       });
-//     });
-//   });
-// };
-
-// const insertUser = (msg, db) => {
-//   return new Promise((resolve, reject) => {
-//     const userObj = createUserObj(msg);
-//     const INSERT_USER_SQL =
-//       'INSERT OR IGNORE INTO users(userID, username, karma, postCount) VALUES(?,?,?,?)';
-//     db.run(
-//       INSERT_USER_SQL,
-//       [userObj.userID, userObj.username, userObj.karma, userObj.postCount],
-//       (err) => {
-//         if (err) {
-//           console.error('...unable to insert user into db');
-//           reject(err);
-//         }
-//         resolve('...user inserted in db');
-//       }
-//     );
-//   });
-// };
-
-// const insertPost = (msg, upload, db) => {
-//   return new Promise((resolve, reject) => {
-//     const postObj = createPostObj(msg, upload);
-//     const INSERT_POST_SQL =
-//       'INSERT INTO posts(messageID, userID, publicID, version, format, resourceType, createdAt, type, secureURL, upvotes) VALUES(?,?,?,?,?,?,?,?,?,?)';
-//     const params = Object.values(postObj);
-//     db.serialize(() => {
-//       db.run(INSERT_POST_SQL, params, (err) => {
-//         if (err) {
-//           console.error('...unable to insert post into db');
-//           reject(err);
-//         }
-//       }).run(
-//         'UPDATE users SET postCount = postCount + 1 WHERE userID = ?',
-//         [msg.author.id],
-//         (err) => {
-//           if (err) {
-//             reject(err);
-//             return;
-//           }
-//           resolve('...post inserted into db at ' + new Date().toString());
-//         }
-//       );
-//     });
-//   });
-// };
-
 /**
  *
  * @param {object} react the reaction object
@@ -245,42 +127,6 @@ const updateKarma = async (react, user, isReactionAdd) => {
   console.log(
     `...${user.username} gave ${karma} karma to ${react.message.author.username}`
   ); // bad practice but whatever
-
-  // return new Promise((resolve, reject) => {
-  //   getPost(react.message.id, db)
-  //     .then((row) => {
-  //       db.serialize(() => {
-  //         db.run(
-  //           'UPDATE users SET karma = karma + ? WHERE userID = ?',
-  //           [karma, react.message.author.id],
-  //           (err) => {
-  //             if (err) {
-  //               console.error(err.message, err.stack);
-  //               reject(err);
-  //               return;
-  //             }
-  //             resolve(
-  //               `...user ${user.username} gave ${karma} karma to user ${react.message.author.username}`
-  //             );
-  //           }
-  //         );
-  //         if (!row) return; // the purspose of this is to  update the karma on a post in the db
-  //         // so if this reaction was on a post, then we update both the user and post karma
-  //         // if reaction is not on a post, we only update user karma
-  //         db.run(
-  //           'UPDATE posts SET upvotes  = upvotes + ? WHERE messageID = ?;',
-  //           [karma, row.messageID],
-  //           (err) => {
-  //             if (err) {
-  //               console.error(err.message, err.stack);
-  //               reject(err);
-  //             }
-  //           }
-  //         );
-  //       });
-  //     })
-  //     .catch(console.error);
-  // });
 };
 
 const getMessageData = (react) => {
@@ -289,31 +135,6 @@ const getMessageData = (react) => {
 };
 
 const karmaCommand = async (msg, userID) => {
-  // const obj = {};
-  // db.get(
-  //   'SELECT karma, postCount FROM users WHERE userID = ?',
-  //   [msg.author.id],
-  //   (err, row) => {
-  //     if (err) {
-  //       console.error(err.message, err.stack);
-  //       return;
-  //     }
-  //     if (!row) {
-  //       obj.err = true;
-  //     } else if (row) {
-  //       obj.karma = row.karma;
-  //       obj.postCount = row.postCount;
-  //     } else obj.err = true;
-  //     let reply = `You have ${obj.karma} karma and ${obj.postCount} dank meme posts.`;
-  //     if (obj.err) {
-  //       reply = "There was an error. I'll get back to you later.";
-  //     }
-  //     msg.reply(reply).then().catch(console.error);
-  //   }
-  // );
-  // TODO: check all db stuff because it always returns the columns as lowercase
-  // TODO: check that db deals with the returned object
-
   try {
     let replyMsg = "There was an error. I'll try to get back to you later.";
     const result = await getUser(userID);
@@ -333,37 +154,6 @@ const karmaCommand = async (msg, userID) => {
     console.error(err.message, err.stack);
   }
 };
-
-// const getUserKarmaCommand = (user, db) => {
-//   return new Promise((resolve, reject) => {
-//     db.get(
-//       'SELECT karma, postCount FROM users WHERE userID = ?',
-//       [user.id],
-//       (err, row) => {
-//         if (err) {
-//           reject(err);
-//           return;
-//         }
-//         resolve(row);
-//       }
-//     );
-//   });
-// };
-// const getUserPosts = (user, db) => {
-//   return new Promise((resolve, reject) => {
-//     db.get(
-//       'SELECT postCount FROM users WHERE userID = ?',
-//       [user.id],
-//       (err, row) => {
-//         if (err) {
-//           reject(err);
-//           return;
-//         }
-//         resolve(row);
-//       }
-//     );
-//   });
-// };
 
 const leaderboardFormatter = (users, user, theLimit) => {
   let limit = theLimit;
