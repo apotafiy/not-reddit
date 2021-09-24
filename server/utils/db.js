@@ -97,7 +97,7 @@ async function insertUser({ userID, username, karma, postCount }) {
   try {
     const client = await pool.connect();
     const query =
-      'INSERT INTO users (userID, username, karma, postCount) values ($1, $2, $3, $4)';
+      'INSERT INTO users (userID, username, karma, postCount) values ($1, $2, $3, $4);';
     await client.query(query, [userID, username, karma, postCount]);
     client.release();
   } catch (err) {
@@ -110,7 +110,7 @@ async function initializeDB() {
   try {
     const client = await pool.connect();
     const createPostsQuery =
-      'CREATE TABLE IF NOT EXISTS posts (messageID TEXT NOT NULL, userID TEXT NOT NULL, publicID TEXT NOT NULL, version TEXT NOT NULL, format TEXT NOT NULL, resourceType TEXT NOT NULL, createdAt TEXT NOT NULL, type TEXT NOT NULL, secureURL TEXT NOT NULL, upvotes INTEGER NOT NULL, FOREIGN KEY (userID) REFERENCES users (userID), PRIMARY KEY (messageID))';
+      'CREATE TABLE IF NOT EXISTS posts (messageID TEXT NOT NULL, userID TEXT NOT NULL, publicID TEXT NOT NULL, version TEXT NOT NULL, format TEXT NOT NULL, resourceType TEXT NOT NULL, createdAt TEXT NOT NULL, type TEXT NOT NULL, secureURL TEXT NOT NULL, upvotes INTEGER NOT NULL, FOREIGN KEY (userID) REFERENCES users (userID), PRIMARY KEY (messageID));';
     const createUsersQuery =
       'CREATE TABLE IF NOT EXISTS users (userID TEXT NOT NULL, username TEXT NOT NULL, karma INTEGER NOT NULL, postCount INTEGER NOT NULL, PRIMARY KEY (userID));';
     await client.query(createPostsQuery);
@@ -124,7 +124,7 @@ async function initializeDB() {
 async function updateUserKarma(userID, value) {
   try {
     const client = await pool.connect();
-    const query = 'UPDATE users SET karma = karma + $1 WHERE userID = $2';
+    const query = 'UPDATE users SET karma = karma + $1 WHERE userid = $2;';
     await client.query(query, [value, userID]);
     client.release();
   } catch (err) {
@@ -135,9 +135,10 @@ async function updateUserKarma(userID, value) {
 
 async function incrementUserPostCount(userID) {
   try {
+    // TODO: update methods arent working
     const client = await pool.connect();
     const query =
-      'UPDATE users SET postCount = postCount + 1 WHERE userID = $1';
+      'UPDATE users SET postCount = postCount + 1 WHERE userID = $1;';
     await client.query(query, [userID]);
     client.release();
   } catch (err) {
@@ -150,7 +151,7 @@ async function updatePostKarma(messageID, value) {
   try {
     const client = await pool.connect();
     const query =
-      'UPDATE posts SET upvotes = upvotes + $1 WHERE messageID = $2';
+      'UPDATE posts SET upvotes = upvotes + $1 WHERE messageID = $2;';
     await client.query(query, [value, messageID]);
     client.release();
   } catch (err) {

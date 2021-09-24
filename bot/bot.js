@@ -237,14 +237,14 @@ const updateKarma = async (react, user, isReactionAdd) => {
   }
   karma = isReactionAdd ? karma : -1 * karma;
 
-  updateUserKarma(user.id, karma);
+  updateUserKarma(react.message.author.id, karma);
   const post = await getPost(react.message.id); // for purpose of checking if the upvote was on a post
   if (post) {
     updatePostKarma(react.message.id, karma);
   }
   console.log(
-    `...${user.id} gave ${karma} karma to ${react.message.author.id}`
-  );
+    `...${user.username} gave ${karma} karma to ${react.message.author.username}`
+  ); // bad practice but whatever
 
   // return new Promise((resolve, reject) => {
   //   getPost(react.message.id, db)
@@ -311,14 +311,21 @@ const karmaCommand = async (msg, userID) => {
   //     msg.reply(reply).then().catch(console.error);
   //   }
   // );
+  // TODO: check all db stuff because it always returns the columns as lowercase
+  // TODO: check that db deals with the returned object
 
   try {
     let replyMsg = "There was an error. I'll try to get back to you later.";
-    const user = await getUser(userID);
-    if (user) {
-      const { karma, postCount } = user;
-      if (karma && postCount) {
-        replyMsg = `${user.username} has ${karma} karma and ${postCount} posts.`;
+    const result = await getUser(userID);
+    if (result) {
+      const user = result.rows[0];
+      if (user) {
+        const { karma, postcount } = user;
+        if (karma && postcount) {
+          replyMsg = `${user.username} has ${karma} karma and ${postcount} posts.`;
+        }
+      } else {
+        console.error('...could not get user from database');
       }
     }
     msg.reply(replyMsg);
@@ -362,7 +369,7 @@ const leaderboardFormatter = (users, user, theLimit) => {
   let limit = theLimit;
   users.sort((a, b) => (b.karma > a.karma ? 1 : a.karma > b.karma ? -1 : 0)); // sort decreasing
 
-  const userIndex = users.findIndex((elem) => elem.userID === user.id);
+  const userIndex = users.findIndex((elem) => elem.userid === user.id);
   if (userIndex === -1) return 'Sorry something went wrong :(';
   if (!limit) {
     limit = 3;
@@ -395,8 +402,9 @@ client.on('message', async (msg) => {
         return;
       }
     }
-
-    await insertUser(createUserObj(msg));
+    if (!(await getUser(msg.author.id))) {
+      await insertUser(createUserObj(msg));
+    }
 
     msg.content = msg.content.trim().toLocaleLowerCase();
 
@@ -423,9 +431,8 @@ client.on('message', async (msg) => {
                 console.error(err.message, err.stack);
               } else throw new Error('Error with uploading file to cloudinary');
             });
-            if (await insertPost(createPostObj(msg, uploadResult))) {
-              incrementUserPostCount(msg.author.id);
-            }
+            await insertPost(createPostObj(msg, uploadResult));
+            incrementUserPostCount(msg.author.id);
             msg.react(upvote);
             msg.react(downvote);
           }
@@ -477,9 +484,12 @@ client.on('message', async (msg) => {
         limit = undefined;
       }
       let replyMsg = 'Sorry there was an issue.';
-      const users = await getAllUsers();
-      if (users) {
-        replyMsg = leaderboardFormatter(users, msg.author, limit);
+      const result = await getAllUsers();
+      if (result) {
+        const users = result.rows;
+        if (users) {
+          replyMsg = leaderboardFormatter(users, msg.author, limit);
+        }
       }
       msg.reply(replyMsg);
     }
@@ -530,5 +540,7 @@ client.on('messageReactionRemove', async (react, user) => {
     console.error(err.message, err.stack);
   }
 });
-
-client.login(process.env.DISCORD_BOT_TOKEN);
+function botLogin() {
+  client.login(process.env.DISCORD_BOT_TOKEN);
+}
+module.exports = { botLogin };
