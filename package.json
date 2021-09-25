@@ -25,7 +25,7 @@
     "start": "node server/index.js",
     "client": "react-scripts start"
   },
-  "proxy":"http://localhost:5000",
+  "proxy":"https://not-reddit-platform.herokuapp.com",
   "eslintConfig": {
     "extends": [
       "react-app",

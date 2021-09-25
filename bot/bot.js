@@ -193,6 +193,7 @@ client.on('message', async (msg) => {
         return;
       }
     }
+
     if (!(await getUser(msg.author.id))) {
       await insertUser(createUserObj(msg));
     }
@@ -208,7 +209,15 @@ client.on('message', async (msg) => {
     const upvote = msg.guild.emojis.cache.get(upvoteName) || DEFAULT_UPVOTE;
     const downvote =
       msg.guild.emojis.cache.get(downvoteName) || DEFAULT_DOWNVOTE;
-
+    /**
+    If user mentions bot, then give option to upvote or downvote
+     */
+    msg.mentions.users.each(async (mentionedUser) => {
+      if (mentionedUser.id === client.user.id) {
+        msg.react(upvote);
+        msg.react(downvote);
+      }
+    });
     if (isMemeChannel(msg) && msgHasOneAttach(msg)) {
       msg.attachments.forEach(async (item) => {
         try {
