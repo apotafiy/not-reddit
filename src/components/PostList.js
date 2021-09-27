@@ -49,16 +49,25 @@ const PostList = () => {
   const [posts, setPosts] = useState(null);
 
   useEffect(async () => {
-    // const url = '';
-    const fetched = await fetch('/api/db/posts');
-    const data = await fetched.json();
-    data.sort((a, b) => a.createdat.localeCompare(b.createdat));
+    const fetchedPosts = await fetch('/api/db/posts');
+    const fetchedUsers = await fetch('/api/db/users');
+    const postsData = await fetchedPosts.json();
+    postsData.sort((a, b) => a.createdat.localeCompare(b.createdat));
+    const usersData = await fetchedUsers.json();
     const idNameMap = {};
-    // for(){
+    usersData.forEach((user) => {
+      if (idNameMap[user.userid] === undefined) {
+        idNameMap[user.userid] = user.username;
+      }
+    });
 
-    // }
-    data.reverse();
-    setPosts(data);
+    postsData.splice(0, Math.floor(postsData.length / 2));
+    postsData.forEach((post) => {
+      post.username = idNameMap[post.userid];
+    });
+
+    postsData.reverse();
+    setPosts(postsData);
   }, []);
 
   return (
