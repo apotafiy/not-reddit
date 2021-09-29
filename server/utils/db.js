@@ -184,6 +184,26 @@ async function updatePostKarma(messageID, value) {
   return null;
 }
 
+async function updateUsername(userID, newName) {
+  try {
+    const client = await pool.connect();
+    const query = 'UPDATE users SET username = $1 WHERE userID = $2;';
+    await client.query(query, [newName, userID], (err, res) => {
+      if (err) {
+        console.log(err.stack);
+      } else {
+        console.log(
+          `...user with id ${userID} changed their username to ${newName}`
+        );
+      }
+    });
+    client.release();
+  } catch (err) {
+    console.error(err);
+  }
+  return null;
+}
+
 module.exports = {
   getAllPosts,
   getAllUsers,
@@ -195,4 +215,5 @@ module.exports = {
   updateUserKarma,
   updatePostKarma,
   incrementUserPostCount,
+  updateUsername,
 };
