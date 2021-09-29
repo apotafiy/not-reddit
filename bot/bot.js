@@ -206,7 +206,7 @@ client.on('message', async (msg) => {
         await insertUser(createUserObj(msg));
       } else {
         // check for new username
-        console.log(result);
+        //console.log(result);
         const dbName = result.rows[0].username;
         const currentName = msg.author.username;
         if (dbName !== currentName) {
