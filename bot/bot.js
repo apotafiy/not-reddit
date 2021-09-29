@@ -199,14 +199,15 @@ client.on('message', async (msg) => {
       }
     }
 
-    const userFromDB = await getUser(msg.author.id);
+    const result = await getUser(msg.author.id);
 
-    if (userFromDB) {
-      if (!userFromDB.rows[0]) {
+    if (result) {
+      if (!result.rows[0]) {
         await insertUser(createUserObj(msg));
       } else {
         // check for new username
-        const dbName = userFromDB[0].username;
+        console.log(result);
+        const dbName = result.rows[0].username;
         const currentName = msg.author.username;
         if (dbName !== currentName) {
           updateUsername(msg.author.id, msg.author.username);
