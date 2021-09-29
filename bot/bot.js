@@ -121,6 +121,9 @@ const updateKarma = async (react, user, isReactionAdd) => {
 
   updateUserKarma(react.message.author.id, karma);
   const result = await getPost(react.message.id); // for purpose of checking if the upvote was on a post
+  if (!result) {
+    return;
+  }
   const post = result.rows[0];
   if (post) {
     updatePostKarma(react.message.id, karma);
@@ -143,7 +146,8 @@ const karmaCommand = async (msg, userID) => {
       const user = result.rows[0];
       if (user) {
         const { karma, postcount } = user;
-        if (karma && postcount) {
+        if (karma !== undefined && postcount !== undefined) {
+          // TODO: when checking for valid values, make sure to explcitly check for equality with undefined
           replyMsg = `${user.username} has ${karma} karma and ${postcount} posts.`;
         }
       } else {
@@ -194,8 +198,13 @@ client.on('message', async (msg) => {
       }
     }
 
-    if (!(await getUser(msg.author.id))) {
-      await insertUser(createUserObj(msg));
+    const userFromDB = await getUser(msg.author.id);
+
+    // TODO: check if they changed username
+    if (userFromDB) {
+      if (!userFromDB.rows[0]) {
+        await insertUser(createUserObj(msg));
+      }
     }
 
     msg.content = msg.content.trim().toLocaleLowerCase();
