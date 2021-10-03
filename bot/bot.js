@@ -263,7 +263,8 @@ client.on('message', async (msg) => {
     */
     if (
       msg.channel.name === 'announcements' ||
-      msg.channel.name === 'cool-lectures'
+      msg.channel.name === 'cool-lectures' ||
+      msg.channel.name === 'meetup-irl'
     ) {
       msg.react(upvote);
       msg.react(downvote);
@@ -301,9 +302,9 @@ client.on('message', async (msg) => {
         limit = undefined;
       }
       let replyMsg = 'Sorry there was an issue.';
-      const result = await getAllUsers();
-      if (result) {
-        const users = result.rows;
+      const dbResult = await getAllUsers();
+      if (dbResult) {
+        const users = dbResult.rows;
         if (users) {
           replyMsg = leaderboardFormatter(users, msg.author, limit);
         }
