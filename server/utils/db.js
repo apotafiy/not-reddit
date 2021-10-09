@@ -1,4 +1,5 @@
 const pool = require('../db/database');
+require('dotenv').config();
 
 async function getAllPosts() {
   try {

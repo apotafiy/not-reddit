@@ -1,8 +1,20 @@
 const express = require('express');
+const path = require('path');
+require('dotenv').config();
 const { getAllUsers, getAllPosts, initializeDB } = require('./utils/db');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
+
+if (process.env.NODE_ENV === 'production') {
+  // serve the build files
+}
+
+// app.use(express.static(path.join(__dirname, '../build'))); // TODO: will this path be an issue. i cant really do otherwise because heroku wont find the react files if they are in a client folder
+
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../build/index.html')); // TODO: same with this path
+// });
 
 app.get('/', (req, res) => {
   res.send('Hello heroku');
