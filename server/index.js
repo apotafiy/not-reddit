@@ -1,5 +1,4 @@
 const express = require('express');
-const { botLogin } = require('../bot/bot');
 const { getAllUsers, getAllPosts, initializeDB } = require('./utils/db');
 
 const PORT = process.env.PORT || 5000;
@@ -34,7 +33,6 @@ app.listen(PORT, async () => {
   try {
     console.log(`Listening on ${PORT}`);
     await initializeDB();
-    botLogin();
   } catch (err) {
     console.error(err);
   }

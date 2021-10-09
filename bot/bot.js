@@ -361,4 +361,5 @@ client.on('messageReactionRemove', async (react, user) => {
 function botLogin() {
   client.login(process.env.DISCORD_BOT_TOKEN);
 }
-module.exports = { botLogin };
+botLogin();
+// module.exports = { botLogin };

@@ -23,11 +23,12 @@
   },
   "main": "index.js",
   "scripts": {
-    "server": "node server/index.js",
+    "start": "node server/index.js",
     "client": "react-scripts start",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run start\" \"npm run client\"",
+    "bot": "node bot/bot.js"
   },
-  "proxy": "https://not-reddit-platform.herokuapp.com",
+  "proxy": "https://localhost:5000",
   "eslintConfig": {
     "extends": [
       "react-app",
