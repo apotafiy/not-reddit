@@ -362,4 +362,3 @@ function botLogin() {
   client.login(process.env.DISCORD_BOT_TOKEN);
 }
 botLogin();
-// TODO: dont forget to add thsi to the npm run
