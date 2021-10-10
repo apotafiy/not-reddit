@@ -48,26 +48,30 @@ const PostList = () => {
   // ];
   const [posts, setPosts] = useState(null);
 
-  useEffect(async () => {
-    const fetchedPosts = await fetch('/api/db/posts');
-    const fetchedUsers = await fetch('/api/db/users');
-    const postsData = await fetchedPosts.json();
-    postsData.sort((a, b) => a.createdat.localeCompare(b.createdat));
-    const usersData = await fetchedUsers.json();
-    const idNameMap = {};
-    usersData.forEach((user) => {
-      if (idNameMap[user.userid] === undefined) {
-        idNameMap[user.userid] = user.username;
-      }
-    });
+  useEffect(() => {
+    async function fetchData() {
+      // TODO: when running the client the terminal said useEffect is sync so need to put everything in an async func inside for it to work
+      const fetchedPosts = await fetch('/api/db/posts');
+      const fetchedUsers = await fetch('/api/db/users');
+      const postsData = await fetchedPosts.json();
+      postsData.sort((a, b) => a.createdat.localeCompare(b.createdat));
+      const usersData = await fetchedUsers.json();
+      const idNameMap = {};
+      usersData.forEach((user) => {
+        if (idNameMap[user.userid] === undefined) {
+          idNameMap[user.userid] = user.username;
+        }
+      });
 
-    postsData.splice(0, Math.floor(postsData.length / 2));
-    postsData.forEach((post) => {
-      post.username = idNameMap[post.userid];
-    });
+      postsData.splice(0, Math.floor(postsData.length / 2));
+      postsData.forEach((post) => {
+        post.username = idNameMap[post.userid];
+      });
 
-    postsData.reverse();
-    setPosts(postsData);
+      postsData.reverse();
+      setPosts(postsData);
+    }
+    fetchData();
   }, []);
 
   return (
