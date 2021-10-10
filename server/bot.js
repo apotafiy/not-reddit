@@ -11,7 +11,7 @@ const {
   updatePostKarma,
   incrementUserPostCount,
   updateUsername,
-} = require('../server/utils/db');
+} = require('./utils/db');
 
 cloud.config({
   cloud_name: process.env.CLOUD_NAME,
