@@ -34,6 +34,10 @@ app.get('/api/db/posts', async (req, res) => {
   }
 });
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
+
 app.listen(PORT, async () => {
   try {
     console.log(`Listening on ${PORT}`);
