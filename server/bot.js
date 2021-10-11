@@ -240,6 +240,8 @@ client.on('message', async (msg) => {
         try {
           const { url } = item;
           if (isImage(url)) {
+            msg.react(upvote);
+            msg.react(downvote);
             let uploadResult;
             await cloud.uploader.upload(url, (res, err) => {
               if (res) {
@@ -250,8 +252,6 @@ client.on('message', async (msg) => {
             });
             await insertPost(createPostObj(msg, uploadResult));
             incrementUserPostCount(msg.author.id);
-            msg.react(upvote);
-            msg.react(downvote);
           }
         } catch (err) {
           console.error(err.message, err.stack);
