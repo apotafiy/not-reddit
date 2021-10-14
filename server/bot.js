@@ -264,7 +264,7 @@ client.on('message', async (msg) => {
     if (
       msg.channel.name === 'announcements' ||
       msg.channel.name === 'cool-lectures' ||
-      msg.channel.name === 'meetup-irl'
+      msg.channel.name === 'irl-meetup-postings'
     ) {
       msg.react(upvote);
       msg.react(downvote);
