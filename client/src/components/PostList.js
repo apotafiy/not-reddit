@@ -63,7 +63,7 @@ const PostList = () => {
         }
       });
 
-      postsData.splice(0, Math.floor(postsData.length / 2));
+      postsData.splice(0, postsData.length - 10);
       postsData.forEach((post) => {
         post.username = idNameMap[post.userid];
       });

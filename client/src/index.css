@@ -7,6 +7,36 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/*.my_navbar {
+  margin: 1% !important;
+}
+
+.reddit-logo {
+  width: 90%;
+}
+
+.navbar-brand {
+  width: 5%;
+}
+
+.nav-link {
+  color: white;
+}*/
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 10s linear;
+  }
+}
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
