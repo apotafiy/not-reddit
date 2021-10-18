@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Bottom from './Bottom';
 import { Dropdown, DropdownButton, Container, Row, Col } from 'react-bootstrap';
 import Post from './Post';
 
@@ -34,6 +35,7 @@ const PostList = (userid) => {
       postsSort(postsData, SORT_POPULAR);
 
       setTotalPosts(postsData);
+      console.log('Total memes:', postsData.length);
 
       // if i ever choose to have individual user pages
       // maybe no need for this idk
@@ -88,7 +90,7 @@ const PostList = (userid) => {
 
   const outerStyles = {
     margin: '100px 0px 0px 0px',
-    padding: '0',
+    padding: '0em 0em 2.5em 0em',
     width: '85vw',
     position: 'absolute',
     left: '50%',
@@ -183,6 +185,7 @@ const PostList = (userid) => {
         {posts
           ? posts.map((post) => <Post dbData={post} key={post.messageid} />)
           : 'Loading...'}
+        <Bottom></Bottom>
       </div>
     </div>
   );

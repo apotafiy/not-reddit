@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Bottom from './Bottom.js';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import User from './User.js';
 
@@ -10,6 +11,7 @@ const UserList = () => {
       const fetchedUsers = await fetch('/api/db/users');
       const usersData = await fetchedUsers.json();
       usersData.sort((a, b) => b.karma - a.karma);
+      console.log('Total users:', usersData.length);
       setUsers(usersData);
     }
     fetchData();
@@ -29,9 +31,10 @@ const UserList = () => {
     width: '70vw',
     position: 'absolute',
     left: '15vw',
+    paddingBottom: '2.5em',
   };
   return (
-    <div>
+    <div style={{ paddingBottom: '2.5em' }}>
       <DropdownButton
         variant="secondary"
         id="dropdown-basic-button"
@@ -45,6 +48,7 @@ const UserList = () => {
         {users
           ? users.map((user) => <User dbData={user} key={user.userid} />)
           : 'Loading...'}
+        <Bottom />
       </div>
     </div>
   );
