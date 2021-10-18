@@ -7,22 +7,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/*.my_navbar {
-  margin: 1% !important;
-}
-
-.reddit-logo {
-  width: 90%;
-}
-
-.navbar-brand {
-  width: 5%;
-}
-
-.nav-link {
-  color: white;
-}*/
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 10s linear;
