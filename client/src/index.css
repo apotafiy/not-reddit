@@ -7,6 +7,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/*@media (min-width: 601px) {
+  #basic-nav-dropdown {
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 600px) {
+  .nav-link-main {
+    visibility: hidden;
+    position: absolute;
+  }
+}
+*/
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 10s linear;
