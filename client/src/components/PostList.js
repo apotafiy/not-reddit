@@ -32,7 +32,7 @@ const PostList = (userid) => {
         post.username = idNameMap[post.userid];
       });
 
-      postsSort(postsData, SORT_POPULAR);
+      postsSort(postsData, SORT_NEW);
 
       setTotalPosts(postsData);
       console.log('Total memes:', postsData.length);
