@@ -3,11 +3,16 @@ import { Dropdown, DropdownButton, Container, Row, Col } from 'react-bootstrap';
 import Post from './Post';
 
 const PostList = (userid) => {
+  const SORT_POPULAR = 'SORT_POPULAR';
+  const SORT_CONTROVERSIAL = 'SORT_CONTROVERSIAL';
+  const SORT_NEW = 'SORT_NEW';
+  const SORT_OLD = 'SORT_OLD';
+
+  const [totalPosts, setTotalPosts] = useState(null);
+
   const [posts, setPosts] = useState(null);
 
   const [postCount, setPostCount] = useState(20);
-
-  const [sort, setSort] = useState('pop');
 
   useEffect(() => {
     async function fetchData(userid) {
@@ -26,45 +31,59 @@ const PostList = (userid) => {
         post.username = idNameMap[post.userid];
       });
 
-      if (userid) {
-        postsData = postsData.filter((post) => post.userid === userid);
-      }
+      postsSort(postsData, SORT_POPULAR);
 
-      getSort(sort, postsData);
-      if (postCount > 0) {
-        postsData.splice(0, postsData.length - postCount); // removes from 0 up to that point
-      }
-      postsData.reverse(); // so posts come in correct order
+      setTotalPosts(postsData);
 
-      setPosts(postsData);
+      // if i ever choose to have individual user pages
+      // maybe no need for this idk
+      // if (userid) {
+      //   postsData = postsData.filter((post) => post.userid === userid);
+      // }
+
+      const displayPosts = postsData.slice(0, 20); // copies from 0 up to that point
+      //displayPosts.reverse(); // so posts come in correct order
+
+      setPosts(displayPosts);
     }
     console.log('fetching');
 
     fetchData();
-  }, [postCount, sort]);
+  }, []);
 
-  function getSort(type, posts) {
-    function sortPop(posts) {
-      posts.sort((a, b) => a.upvotes - b.upvotes);
+  function postsSort(arr, type) {
+    function sortPop(arr) {
+      arr.sort((a, b) => b.upvotes - a.upvotes);
     }
-    function sortCont(posts) {
-      posts.sort((a, b) => b.upvotes - a.upvotes);
+    function sortCont(arr) {
+      arr.sort((a, b) => a.upvotes - b.upvotes);
     }
-    function sortNew(posts) {
-      posts.sort((a, b) => a.createdat.localeCompare(b.createdat)); // sort newest
+    function sortNew(arr) {
+      arr.sort((a, b) => b.createdat.localeCompare(a.createdat)); // sort newest
     }
-    function sortOld(posts) {
-      posts.sort((a, b) => b.createdat.localeCompare(a.createdat));
+    function sortOld(arr) {
+      arr.sort((a, b) => a.createdat.localeCompare(b.createdat));
     }
-    if (type === 'cont') {
-      sortCont(posts);
-    } else if (type === 'new') {
-      sortNew(posts);
-    } else if (type === 'old') {
-      sortOld(posts);
+    if (type === SORT_CONTROVERSIAL) {
+      sortCont(arr);
+    } else if (type === SORT_NEW) {
+      sortNew(arr);
+    } else if (type === SORT_OLD) {
+      sortOld(arr);
     } else {
-      sortPop(posts);
+      sortPop(arr);
     }
+    //console.log(arr);
+  }
+
+  function onSortBy(type) {
+    postsSort(totalPosts, type);
+    setPosts(totalPosts.slice(0, postCount));
+  }
+
+  function onChangeCount(count) {
+    setPostCount(count);
+    setPosts(totalPosts.slice(0, count ? count : totalPosts.length));
   }
 
   const outerStyles = {
@@ -93,28 +112,28 @@ const PostList = (userid) => {
               >
                 <Dropdown.Item
                   onClick={() => {
-                    setSort('pop');
+                    onSortBy(SORT_POPULAR);
                   }}
                 >
                   Popular
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => {
-                    setSort('cont');
+                    onSortBy(SORT_CONTROVERSIAL);
                   }}
                 >
                   Controversial
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => {
-                    setSort('new');
+                    onSortBy(SORT_NEW);
                   }}
                 >
                   Newest
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => {
-                    setSort('old');
+                    onSortBy(SORT_OLD);
                   }}
                 >
                   Oldest
@@ -127,16 +146,32 @@ const PostList = (userid) => {
                 id="dropdown-basic-button"
                 title="View #"
               >
-                <Dropdown.Item onClick={() => setPostCount(20)}>
+                <Dropdown.Item
+                  onClick={() => {
+                    onChangeCount(20);
+                  }}
+                >
                   20
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => setPostCount(50)}>
+                <Dropdown.Item
+                  onClick={() => {
+                    onChangeCount(50);
+                  }}
+                >
                   50
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => setPostCount(100)}>
+                <Dropdown.Item
+                  onClick={() => {
+                    onChangeCount(100);
+                  }}
+                >
                   100
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => setPostCount(-1)}>
+                <Dropdown.Item
+                  onClick={() => {
+                    onChangeCount();
+                  }}
+                >
                   All {'(Be careful Icarus)'}
                 </Dropdown.Item>
               </DropdownButton>

@@ -11,7 +11,7 @@ const Post = ({ dbData }) => {
     img.addEventListener('load', function () {
       const width = this.naturalWidth;
       const height = this.naturalHeight;
-      const newSpan = Math.floor((height / width) * 25) + 22; // random formula that seems to work
+      const newSpan = Math.floor((height / width) * 26) + 22; // random formula that seems to work ok
       setSpan(newSpan);
     });
     img.src = secureurl;
