@@ -11,7 +11,7 @@ const Post = ({ dbData }) => {
     img.addEventListener('load', function () {
       const width = this.naturalWidth;
       const height = this.naturalHeight;
-      const newSpan = Math.floor((height / width) * 24) + 24; // random formula that seems to work
+      const newSpan = Math.floor((height / width) * 25) + 22; // random formula that seems to work
       setSpan(newSpan);
     });
     img.src = secureurl;
@@ -19,7 +19,7 @@ const Post = ({ dbData }) => {
   fetchData();
 
   const outerStyles = {
-    margin: '15px 10px',
+    margin: '10px 10px',
     padding: '0',
     gridRowEnd: `span ${span ? span : '26'}`,
   };

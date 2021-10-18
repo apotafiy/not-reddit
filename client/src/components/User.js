@@ -1,7 +1,7 @@
 import { Card, Container, Row, Col } from 'react-bootstrap';
 
 const User = ({ dbData }) => {
-  const { userid, username, karma, postcount } = dbData;
+  const { username, karma, postcount } = dbData;
 
   return (
     <div>
