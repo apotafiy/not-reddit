@@ -2,10 +2,9 @@ function Bottom() {
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         bottom: '0',
-        width: '160vw',
-        left: '-20vw',
+        width: '100vw',
       }}
     >
       <footer className="bg-dark">test</footer>

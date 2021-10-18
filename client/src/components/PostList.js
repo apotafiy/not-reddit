@@ -185,7 +185,6 @@ const PostList = (userid) => {
         {posts
           ? posts.map((post) => <Post dbData={post} key={post.messageid} />)
           : 'Loading...'}
-        <Bottom></Bottom>
       </div>
     </div>
   );

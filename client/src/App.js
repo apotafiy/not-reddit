@@ -2,6 +2,7 @@ import Home from './components/Home';
 import PostList from './components/PostList';
 import MyNavbar from './components/Navbar';
 import UserList from './components/UserList';
+import Bottom from './components/Bottom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './index.css';
 
@@ -22,6 +23,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
+      <Bottom />
     </div>
   );
 }

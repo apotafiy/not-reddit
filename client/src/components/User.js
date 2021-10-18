@@ -1,6 +1,6 @@
 import { Card, Container, Row, Col } from 'react-bootstrap';
 
-const User = ({ dbData }) => {
+const User = ({ dbData, index }) => {
   const { username, karma, postcount } = dbData;
 
   return (
@@ -16,6 +16,8 @@ const User = ({ dbData }) => {
       >
         <Container>
           <Row>
+            <Col>{index}.</Col>
+
             <Col>Username: {username}</Col>
             <Col>Karma: {karma}</Col>
             <Col>Posts: {postcount}</Col>

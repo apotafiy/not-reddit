@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Bottom from './Bottom.js';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import User from './User.js';
 
@@ -28,9 +27,7 @@ const UserList = () => {
   }
 
   const outerStyles = {
-    width: '70vw',
-    position: 'absolute',
-    left: '15vw',
+    margin: '0px 50px 0px 50px',
     paddingBottom: '2.5em',
   };
   return (
@@ -39,16 +36,15 @@ const UserList = () => {
         variant="secondary"
         id="dropdown-basic-button"
         title="Sort by"
-        style={{ postion: 'absolute', left: '15vw', margin: '1em 0em' }}
+        style={{ margin: '25px 50px 25px 50px' }}
       >
         <Dropdown.Item onClick={sortPop}>Popular</Dropdown.Item>
         <Dropdown.Item onClick={sortCont}>Controversial</Dropdown.Item>
       </DropdownButton>
       <div style={outerStyles} className="user-list">
         {users
-          ? users.map((user) => <User dbData={user} key={user.userid} />)
+          ? users.map((user, i) => <User index={i} dbData={user} key={i} />)
           : 'Loading...'}
-        <Bottom />
       </div>
     </div>
   );

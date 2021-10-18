@@ -7,7 +7,7 @@ function MyNavbar() {
       <Container className="ms-1">
         <Navbar.Brand href="/">
           <Image
-            className="reddit-logo ms-1 App-logo"
+            className="reddit-logo ms-1"
             src={logo}
             alt="Logo"
             height="32px"
